@@ -55,8 +55,8 @@ def sensor_reset():
 # Platform turns (going towards 0 deg turns the sensor right)
 def sensor_right():
     board.bus_servo_set_position(.5, [[plat_servo, 100]])
-    time.sleep(2)
+    time.sleep(.5)
 
 def sensor_left():
     board.bus_servo_set_position(.5, [[plat_servo, 900]])
-    time.sleep(2)
+    time.sleep(.5)

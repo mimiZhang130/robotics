@@ -14,7 +14,7 @@ def blocked(dist):
         return True
     else:
         return False
-
+'''
 def checkBlockedandRotate():
     print("checking")
     print(s.getDistance())
@@ -50,6 +50,40 @@ def checkBlockedandRotate():
             if blocked(s.getDistance()):
                 print("blocked left")
                 turnRight90()
+    sensor_reset()
+'''
+
+def checkBlockedandRotate():
+    print("checking")
+    print(s.getDistance())
+    right_blocked = False
+    left_blocked = False
+
+    # Check if blocked forward
+    if blocked(s.getDistance()):
+        print("blocked front")
+
+        # Rotate sensor right & check right distance
+        sensor_right()
+        print("right distance: " + str(s.getDistance()))
+        if blocked(s.getDistance()):
+            right_blocked = True
+        
+        # Rotate sensor left & check left distance
+        sensor_left()
+        print("left distance: " + str(s.getDistance()))
+        if blocked(s.getDistance()):
+            left_blocked = True
+
+        # turn based on left & right blocks
+        if right_blocked and left_blocked:
+            turnRight90()
+            turnRight90()
+        elif right_blocked:
+            turnLeft90()
+        else:
+            turnRight90()
+        
     sensor_reset()
 
 if __name__ == '__main__':  
