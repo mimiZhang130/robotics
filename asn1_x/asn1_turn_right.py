@@ -3,7 +3,6 @@
         # being lifted and moved forward (or backward) simultaneously, followed by 
         # the next pair and so forth, creating a “ripple” effect.
 from asn1_movement import makeStep, send_positions
-import argparse
 import time
 
 OG_HIP = 500
