@@ -16,7 +16,7 @@ def blocked(dist):
         return False
 
 def checkBlockedandRotate():
-    print("checking")
+    print("checking yay")
     print(s.getDistance())
     # Check if blocked forward
     if blocked(s.getDistance()):
