@@ -1,6 +1,7 @@
 import ros_robot_controller_sdk as rrc
 import sonar
 import signal
+import time
 
 # + Initializaion 
 board = rrc.Board()
@@ -43,3 +44,19 @@ def makeStep(hip=None, knee=None, foot=None):
         positions.append([foot_servo(leg), val])
 
     return positions
+
+plat_servo = 21
+
+
+def sensor_reset():
+    board.bus_servo_set_position(.5, [[plat_servo, 507]])
+    time.sleep(.5)
+
+# Platform turns (going towards 0 deg turns the sensor right)
+def sensor_right():
+    board.bus_servo_set_position(.5, [[plat_servo, 100]])
+    time.sleep(2)
+
+def sensor_left():
+    board.bus_servo_set_position(.5, [[plat_servo, 900]])
+    time.sleep(2)

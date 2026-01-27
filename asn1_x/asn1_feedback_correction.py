@@ -1,4 +1,6 @@
 import sonar
+from asn1_movement import sensor_right
+import time
 
 s = sonar.Sonar()
 
@@ -14,15 +16,28 @@ if __name__ == '__main__':
     error = 0
     prev_error = error
 
+    # time
+    prev_time = 0
+    curr_time = 0
+
     # setup
     measured = 35
-    dt = 1 # TODO?
+    
     target = 35 # our target is 35
 
     while True:
-        # TODO get measured distance
-        
+        # get measured distance
+        sensor_right()
+        measured = s.getDistance()
+
+        # set dt
+        prev_time = curr_time
+        curr_time = time.time()
+        dt = curr_time - prev_time
+
+        # calculate error
         error = measured - target
+
         # proportional: how wrong right now
         p = k_p * error
         
@@ -37,4 +52,5 @@ if __name__ == '__main__':
         # output 
         output = p + i + d
 
-        # TODO what do you do with output?
+        # TODO what do you do with output? 
+        
