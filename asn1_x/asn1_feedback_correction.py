@@ -7,9 +7,9 @@ from asn1_initialization import initialization
 
 s = sonar.Sonar()
 
-k_p = .01 # proportional gain
-k_i = .005 # integral gain
-k_d = .04 # derivative gain
+k_p = .04 # proportional gain
+k_i = 0 # integral gain
+k_d = 0 # derivative gain
 
 # SETUP
 target = 365 # our target is 35 from chassis (35 + 1.5)
@@ -56,6 +56,7 @@ def right_correction(prev_time, curr_time):
     curr_time = time.time()
 
     while True:
+        checkBlockedandRotate()
         # calculate times since last measured
         prev_time = curr_time
         curr_time = time.time()
@@ -86,13 +87,12 @@ def right_correction(prev_time, curr_time):
         print("dist: " + str(measured))
         
         # hip adjusts
-        u = int(output) * 5     # Scaling servo "ticks" used by hip servo
-        hip_adjusts = [u, u, u, -u, -u, -u]
+        u = int(output * 10)     # Scaling servo "ticks" used by hip servo
+        hip_adjusts = [u, u, u, u, u, u]
 
         # straighten out sensor
         sensor_reset()
         tripodCycle(hip_adjusts)
-        checkBlockedandRotate()
 
 def left_correction(prev_time, curr_time):
     initialization()
