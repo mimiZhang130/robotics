@@ -7,10 +7,10 @@ import time
 
 OG_HIP = 500
 
-def tripodCycle():
+def tripodCycle(hipAdjusts = [0, 0, 0, 0, 0, 0]):
     # Step 1: Lifting and moving forwards Tripod Group A and Return Tripod Group B to OG option
     step1 = makeStep(
-        hip = {1:380, 3:380, 5:600, 2:OG_HIP, 4:OG_HIP, 6:OG_HIP},
+        hip = {1:380 + hipAdjusts[0], 3:380 + hipAdjusts[2], 5:600 + hipAdjusts[4], 2:OG_HIP, 4:OG_HIP, 6:OG_HIP},
         knee = {1:200, 3:200, 5:700}
     )
     
@@ -27,7 +27,7 @@ def tripodCycle():
 
     # Step 3: Return Tripod Group A to OG position and lift Tripod Group B
     step3 = makeStep(
-        hip = {1:OG_HIP, 3:OG_HIP, 5:OG_HIP, 2:400, 4:620, 6:620},
+        hip = {1:OG_HIP, 3:OG_HIP, 5:OG_HIP, 2:400 + hipAdjusts[1], 4:620 + hipAdjusts[3], 6:620 + hipAdjusts[5]},
         knee = {2:180, 4:780, 6:750 }
     )
 
