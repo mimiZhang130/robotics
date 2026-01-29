@@ -75,7 +75,7 @@ def right_correction(prev_time, curr_time):
         else:
             measured_f = (alpha * measured) + (1 - alpha) * measured_f
 
-        [error, output] = calculate_error(dt, measured)
+        [error, output] = calculate_error(dt, measured_f)
         
         # cap output [-20,20]
         output = max(min(output, 20), -20)
