@@ -9,9 +9,8 @@ OG_HIP = 500
 
 def turnRight():
     # Step 1: Lift and move tripod group A where legs 1 & 3 move forwards & 5 moves backwards 
-    # & return tripod group B back to OG position
     step1 = makeStep(
-        hip = {1:400, 3:400, 5:400, 2:OG_HIP, 4:OG_HIP, 6:OG_HIP},
+        hip = {1:400, 3:400, 5:400},
         knee = {1:200, 3:200, 5:700}
     )
 
@@ -27,9 +26,8 @@ def turnRight():
     time.sleep(.3)
 
     # Step 3: Lift and move tripod group B where legs 2 move forwards & legs 4 & 6 move backwards
-    # & return Tripod Group A to OG position and lift
     step3 = makeStep(
-        hip = {1:OG_HIP, 3:OG_HIP, 5:OG_HIP, 2:400, 4:400, 6:400},
+        hip = {2:400, 4:400, 6:400},
         knee = {2:180, 4:780, 6:750 }
     )
 
@@ -44,6 +42,13 @@ def turnRight():
     send_positions(.2, step4)
     time.sleep(.3)
 
+    step5 = makeStep(
+        hip = {1: OG_HIP, 2: OG_HIP, 3: OG_HIP, 4: OG_HIP, 5: OG_HIP, 6: OG_HIP}
+    )
+
+    send_positions(.2, step5)
+    time.sleep(.3)
+    
 def turnRight90():
     for i in range(4):
         turnRight()
