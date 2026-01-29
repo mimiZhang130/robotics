@@ -7,19 +7,20 @@ from asn1_initialization import initialization
 
 s = sonar.Sonar()
 
-def calculate_error(dt, measured = 350):
-    # pid 
-    k_p = .02 # proportional gain
-    k_i = .005 # integral gain
-    k_d = .02 # derivative gain
-    
-    # error
-    total_error = 0
-    error = 0
-    prev_error = error
+k_p = .02 # proportional gain
+k_i = .005 # integral gain
+k_d = .02 # derivative gain
 
-    # SETUP
-    target = 365 # our target is 35 from chassis (35 + 1.5)
+# SETUP
+target = 365 # our target is 35 from chassis (35 + 1.5)
+
+# error
+total_error = 0.0
+prev_error = None
+
+def calculate_error(dt, measured):
+    # pid 
+    global total_error, prev_error
 
     # calculate error
     error = target - measured
@@ -32,7 +33,10 @@ def calculate_error(dt, measured = 350):
     i = k_i * total_error
 
     # derivative: how is error changing
-    d = k_d * (error - prev_error) / dt
+    if prev_error == None:
+        d = 0.0
+    else:
+        d = k_d * (error - prev_error) / dt
     prev_error = error
 
     # output 
@@ -40,8 +44,17 @@ def calculate_error(dt, measured = 350):
 
     return [error, output]
 
+def pid_reset():
+    global total_error, prev_error
+    total_error = 0.0
+    prev_error = None
+
 def right_correction(prev_time, curr_time):
     initialization()
+    pid_reset()
+
+    curr_time = time.time()
+
     while True:
         # calculate times since last measured
         prev_time = curr_time
@@ -53,11 +66,19 @@ def right_correction(prev_time, curr_time):
         # get measured distance
         sensor_right()
         measured = s.getDistance()
+
+        # Low pass filter (tunes out high frequency responeses)
+        measured_f = None
+        alpha = 0.2
+        if measured_f == None:
+            measured_f = measured
+        else:
+            measured_f = (alpha * measured) + (1 - alpha) * measured_f
+
         [error, output] = calculate_error(dt, measured)
         
-        # cap output
-        output = min(int(output), 20)
-        output = max(int(output), -20)
+        # cap output [-20,20]
+        output = max(min(output, 20), -20)
 
         # print debugs
         print("error: " + str(error))
@@ -65,7 +86,8 @@ def right_correction(prev_time, curr_time):
         print("dist: " + str(measured))
         
         # hip adjusts
-        hip_adjusts = [output * 10, 0, output * 10, 0, 0, 0]
+        u = output * 10     # Scaling servo "ticks" used by hip servo
+        hip_adjusts = [u, u, u, -u, -u, -u]
 
         # straighten out sensor
         sensor_reset()
@@ -74,6 +96,10 @@ def right_correction(prev_time, curr_time):
 
 def left_correction(prev_time, curr_time):
     initialization()
+    pid_reset()
+
+    curr_time = time.time()
+
     while True:
         # calculate times since last measured
         prev_time = curr_time
@@ -88,8 +114,7 @@ def left_correction(prev_time, curr_time):
         [error, output] = calculate_error(dt, measured)
         
         # cap output
-        output = min(int(output), 20)
-        output = max(int(output), -20)
+        output = max(min(output, 20), -20)
 
         # print debugs
         print("error: " + str(error))
@@ -97,7 +122,8 @@ def left_correction(prev_time, curr_time):
         print("dist: " + str(measured))
 
         # hip adjusts
-        hip_adjusts = [output * -10, 0, output * -10, 0, 0, 0]
+        u = output * 10     # Scaling servo "ticks" used by hip servo
+        hip_adjusts = [-u, -u, -u, u, u, u]
 
         # straighten out sensor
         sensor_reset()
