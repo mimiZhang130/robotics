@@ -7,7 +7,7 @@ from asn1_initialization import initialization
 
 s = sonar.Sonar()
 
-k_p = .04 # proportional gain
+k_p = .06 # proportional gain
 k_i = 0 # integral gain
 k_d = 0 # derivative gain
 
@@ -33,7 +33,7 @@ def calculate_error(dt, measured):
     i = k_i * total_error
 
     # derivative: how is error changing
-    if prev_error == None:
+    if prev_error == None and dt != 0:
         d = 0.0
     else:
         d = k_d * (error - prev_error) / dt
@@ -50,13 +50,16 @@ def pid_reset():
     prev_error = None
 
 def right_correction(prev_time, curr_time):
-    initialization()
+    # initialization()
     pid_reset()
 
     curr_time = time.time()
 
+    measured_f = None
+
     while True:
         checkBlockedandRotate()
+
         # calculate times since last measured
         prev_time = curr_time
         curr_time = time.time()
@@ -69,8 +72,7 @@ def right_correction(prev_time, curr_time):
         measured = s.getDistance()
 
         # Low pass filter (tunes out high frequency responeses)
-        measured_f = None
-        alpha = 0.2
+        alpha = 0.3
         if measured_f == None:
             measured_f = measured
         else:
@@ -95,12 +97,16 @@ def right_correction(prev_time, curr_time):
         tripodCycle(hip_adjusts)
 
 def left_correction(prev_time, curr_time):
-    initialization()
+    # initialization()
     pid_reset()
 
     curr_time = time.time()
 
+    measured_f = None
+
     while True:
+        checkBlockedandRotate()
+
         # calculate times since last measured
         prev_time = curr_time
         curr_time = time.time()
@@ -111,6 +117,13 @@ def left_correction(prev_time, curr_time):
         # get measured distance
         sensor_left()
         measured = s.getDistance()
+
+        # alpha = 0.3
+        # if measured_f == None:
+        #     measured_f = measured
+        # else:
+        #     measured_f = (alpha * measured) + (1 - alpha) * measured_f
+
         [error, output] = calculate_error(dt, measured)
         
         # cap output
@@ -122,13 +135,12 @@ def left_correction(prev_time, curr_time):
         print("dist: " + str(measured))
 
         # hip adjusts
-        u = output * 10     # Scaling servo "ticks" used by hip servo
-        hip_adjusts = [-u, -u, -u, u, u, u]
+        u = int(output * 10)     # Scaling servo "ticks" used by hip servo
+        hip_adjusts = [-u, u, -u, -u, u, -u]
 
         # straighten out sensor
         sensor_reset()
         tripodCycle(hip_adjusts)
-        checkBlockedandRotate()
 
 
 

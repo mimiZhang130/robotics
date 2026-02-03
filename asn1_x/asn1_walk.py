@@ -86,7 +86,7 @@ def checkBlockedandRotate():
 #     sensor_reset()
 
 if __name__ == '__main__':  
-    initialization()
+    # initialization()
     while True:
         tripodCycle()
         checkBlockedandRotate()

@@ -12,6 +12,7 @@ def Stop(signum, frame):
 signal.signal(signal.SIGINT, Stop)
 
 def initialization ():
+    sensor_reset()
     print("Initializing")
     
     print("Setting Hips")
