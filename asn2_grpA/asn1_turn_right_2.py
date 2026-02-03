@@ -7,6 +7,7 @@ import time
 
 OG_HIP = 500
 TURN_HIP = 350
+TIME_SLEEP = .3
 def turnRight():
     # Step 1: Lift and move tripod group A where legs 1 & 3 move forwards & 5 moves backwards 
     step1 = makeStep(
@@ -14,14 +15,14 @@ def turnRight():
         knee = {1:213, 3:220, 5:786}
     )
     send_positions(.3, step1) 
-    time.sleep(2)
+    time.sleep(TIME_SLEEP)
     
     # Step 2: Put down Tripod Group A
     step2 = makeStep(
         knee = {1: 313, 3: 320, 5: 686},
     )
     send_positions(.2, step2)
-    time.sleep(2)
+    time.sleep(TIME_SLEEP)
     
     # Step 3: Lift and move tripod group B where legs 2 move forwards & legs 4 & 6 move backwards
     step3 = makeStep(
@@ -29,7 +30,7 @@ def turnRight():
         knee = {2:212, 4:786, 6:786}
     )
     send_positions(.3, step3)
-    time.sleep(2)
+    time.sleep(TIME_SLEEP)
 
     # Step 4: Put tripod group B back on the ground
     step4 = makeStep(
@@ -37,7 +38,7 @@ def turnRight():
     )
 
     send_positions(.2, step4)
-    time.sleep(2)
+    time.sleep(TIME_SLEEP)
 
 def turnRight90():
     for i in range(4):
