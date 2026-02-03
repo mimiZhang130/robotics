@@ -1,4 +1,4 @@
-from asn1_movement import send_positions, makeStep
+from asn1_movement import send_positions, makeStep, sensor_reset
 import signal
 import time
 OG_HIP = 500
