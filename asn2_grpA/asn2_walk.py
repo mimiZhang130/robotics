@@ -1,9 +1,10 @@
-from asn1_tripod import tripodCycle
+from asn2_tripod import tripodCycle
 import sonar 
-from asn1_turn_right import turnRight90
-from asn1_turn_left import turnLeft90
-from asn1_movement import sensor_left, sensor_right, sensor_reset
-from asn1_initialization import initialization
+from asn2_turn_right import turnRight90
+from asn2_turn_left import turnLeft90
+from asn2_movement import sensor_left, sensor_right, sensor_reset
+from asn2_initialization import initialization
+from time import time
 
 s = sonar.Sonar()
 
@@ -90,3 +91,4 @@ if __name__ == '__main__':
     while True:
         tripodCycle()
         checkBlockedandRotate()
+        time.sleep(1)

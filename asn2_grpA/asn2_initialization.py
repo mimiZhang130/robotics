@@ -1,4 +1,4 @@
-from asn1_movement import send_positions, makeStep, sensor_reset
+from asn2_movement import send_positions, makeStep, sensor_reset
 import signal
 import time
 OG_HIP = 500
@@ -32,13 +32,6 @@ def initialization ():
     )
     send_positions(1, step2)
     time.sleep(1)
-
-    # print("Setting Feet")
-    # step3 = makeStep(
-    #     foot = {1: 200, 2: 199, 3: 200, 4: 799, 5: 800, 6: 799}
-    # )
-    # send_positions(1, step3)
-    # time.sleep(1)
     
     print("Finished Initialization")
 

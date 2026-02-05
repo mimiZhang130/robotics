@@ -2,7 +2,7 @@
 # Tripod: This gait is characterized by a pair of legs, one on each side of the body, 
         # being lifted and moved forward (or backward) simultaneously, followed by 
         # the next pair and so forth, creating a “ripple” effect.
-from asn1_movement import makeStep, send_positions
+from asn2_movement import makeStep, send_positions
 import time
 
 OG_HIP = 500
@@ -35,7 +35,7 @@ def tripodCycle(hipAdjusts = [0, 0, 0, 0, 0, 0]):
     # Step 3: Return Tripod Group A to OG position and lift Tripod Group B
     step3 = makeStep(
         # hip = {1:OG_HIP, 3:OG_HIP, 5:OG_HIP, 2:400 + hipAdjusts[1], 4:620 + hipAdjusts[3], 6:620 + hipAdjusts[5]},
-        hip = {1:OG_HIP, 3:OG_HIP, 5:OG_HIP, 2:400 + hipAdjusts[1], 4:595 + hipAdjusts[3], 6:595 + hipAdjusts[5]},
+        hip = {1:OG_HIP, 3:OG_HIP, 5:OG_HIP, 2:400 + hipAdjusts[1], 4:635 + hipAdjusts[3], 6:635 + hipAdjusts[5]},
         knee = {2:180, 4:780, 6:750 }
     )
 

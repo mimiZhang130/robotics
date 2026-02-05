@@ -1,20 +1,17 @@
 # General Notes: I think this works (if i did the math in my head right). Maybe add more validation for the inputs and stuff 
 # so that like numbers outside of the accpetable range can't be inputed? Otherwise hopefully this works 
 
-from asn1_tripod import tripodCycle
-from asn1_turn_left import turnLeft90
-from asn1_turn_right import turnRight90
-from asn1_turn_180 import turn180
+from asn2_tripod import tripodCycle
+from asn2_turn_left import turnLeft90
+from asn2_turn_right import turnRight90
+from asn2_turn_180 import turn180
 
 # Importing set directions (k) and map
 from asn2_grpA import DIRECTION, CSME301Map
 
 # Move forward one cell block (center-to-center)
 cycles_per_cell = 6
-def forwardCell(hipAdjust = None):
-    if hipAdjust == None:
-        hipAdjust = [0,0,0,0,0,0]
-    
+def forwardCell(hipAdjust = [0, 0, 0, 0, 0, 0]):
     for i in range(cycles_per_cell):
         tripodCycle(hipAdjusts=hipAdjust)
 
@@ -64,7 +61,6 @@ def execMotion(frame, action):
         di, dj = deltaPos(frame['k'])
         frame['i'] += di
         frame['j'] += dj
-    
     elif action == 'R':
         # When turning we dont actually move anywhere so the i and j doesn't change
         # Heading is the only thing that changes
@@ -125,7 +121,6 @@ def localize():
         execMotion(frame, a)
         # Prints out current position
         print("Step " + str(step) + ": " + a + " -> " + printFrame(frame))
-
     
 if __name__ == "__main__":
     localize()

@@ -17,9 +17,10 @@ signal.signal(signal.SIGINT, Stop)
 def send_positions(duration, positions):
     # Positions is a list of servo ids positions 
     # EX: [[1, 500], [3, 200], [5, 230]]
-    # bounds = 10
-    # if not s.getDistance() < bounds:
     board.bus_servo_set_position(duration, positions)
+
+# CREATE A MOVEMENT
+# makeStep creates a step that can then be fed into send_positions to run
 
 def hip_servo(legNum):  
     return (legNum - 1) * 3 + 1
@@ -45,14 +46,16 @@ def makeStep(hip=None, knee=None, foot=None):
 
     return positions
 
-plat_servo = 21
 
+# PLATFORM TURNS
+# going towards 0 deg turns the sensor right
+
+plat_servo = 21
 
 def sensor_reset():
     board.bus_servo_set_position(.5, [[plat_servo, 507]])
     time.sleep(.5)
 
-# Platform turns (going towards 0 deg turns the sensor right)
 def sensor_right():
     board.bus_servo_set_position(.5, [[plat_servo, 100]])
     time.sleep(.5)

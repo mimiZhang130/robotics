@@ -1,5 +1,4 @@
-
-from asn1_turn_right import turnRight90
+from asn2_turn_right import turnRight90
 
 def turn180():
     turnRight90()

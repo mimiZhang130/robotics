@@ -1,9 +1,9 @@
-from asn1_tripod import tripodCycle
-from asn1_walk import checkBlockedandRotate
+from asn2_tripod import tripodCycle
+from asn2_walk import checkBlockedandRotate
 import sonar
-from asn1_movement import sensor_right, sensor_left, sensor_reset
+from asn2_movement import sensor_right, sensor_left, sensor_reset
 import time
-from asn1_initialization import initialization
+from asn2_initialization import initialization
 
 s = sonar.Sonar()
 
