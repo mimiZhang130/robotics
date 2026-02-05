@@ -7,12 +7,27 @@ from asn2_initialization import initialization
 
 s = sonar.Sonar()
 
-k_p = .06 # proportional gain
-k_i = 0 # integral gain
-k_d = 0 # derivative gain
+k_p = None # proportional gain
+k_i = None # integral gain
+k_d = None # derivative gain
 
 # SETUP
-target = 365 # our target is 35 from chassis (35 + 1.5)
+target = None # our target is 35 from chassis (35 + 1.5)
+
+def inputGains():
+    # Allows user to input PID gain values and target value
+    global k_p, k_i, k_d, target 
+
+    k_p = float(input("Enter k_p value (ex: 0.0): "))
+    k_i = float(input("\n Enter k_i value (ex: 0.0) "))
+    k_d = float(input("\n Enter k_d value (ex: 0.0 )"))
+
+    # User set target too (press Enter to keep default)
+    target = int(input("\n Enter target distance: ").strip())
+
+    print("Using PID gains: k_p=" + str(k_p) + ", k_i=" + str(k_i) + ", k_d=" + str(k_d))
+    print("Target distance: " + str(target))
+
 
 # error
 total_error = 0.0
@@ -20,7 +35,7 @@ prev_error = None
 
 def calculate_error(dt, measured):
     # pid 
-    global total_error, prev_error
+    global total_error, prev_error, k_p, k_d, k_i, target
 
     # calculate error
     error = target - measured
@@ -118,6 +133,8 @@ def left_correction(prev_time, curr_time):
         sensor_left()
         measured = s.getDistance()
 
+        if abs(measured - target) < 3: 
+            continue
         # alpha = 0.3
         # if measured_f == None:
         #     measured_f = measured
@@ -141,9 +158,3 @@ def left_correction(prev_time, curr_time):
         # straighten out sensor
         sensor_reset()
         tripodCycle(hip_adjusts)
-
-
-
-    
-
-        
