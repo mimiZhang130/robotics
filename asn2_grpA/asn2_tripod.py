@@ -9,9 +9,6 @@ OG_HIP = 500
 
 def tripodCycle(hipAdjusts = [0, 0, 0, 0, 0, 0]):
     # Step 1: Lifting and moving forwards Tripod Group A 
-    print("hip 1: " + str(380 + hipAdjusts[0]))
-    print("hip 3: " + str(380 + hipAdjusts[2]))
-    print("hip 5: " + str(600 + hipAdjusts[4]))
     step1 = makeStep(
         hip = {1:380 + hipAdjusts[0], 3:380 + hipAdjusts[2], 5:600 + hipAdjusts[4], 2:OG_HIP, 4:OG_HIP, 6:OG_HIP},
         knee = {1:200, 3:200, 5:700}
@@ -28,9 +25,6 @@ def tripodCycle(hipAdjusts = [0, 0, 0, 0, 0, 0]):
     send_positions(.2, step2)
     time.sleep(.3)
 
-    print("hip 2: " + str(400 + hipAdjusts[1]))
-    print("hip 4: " + str(620 + hipAdjusts[3]))
-    print("hip 6: " + str(620 + hipAdjusts[5]))
 
     # Step 3: Return Tripod Group A to OG position and lift Tripod Group B
     step3 = makeStep(

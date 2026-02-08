@@ -9,9 +9,6 @@ from asn2_turn_180 import turn180
 # Importing set directions (k) and map
 from asn2_grpA import DIRECTION, CSME301Map
 
-# robot info stores current direction & location
-robot_info = [DIRECTION.South, [0, 0]]
-
 # Move forward one cell block (center-to-center)
 cycles_per_cell = 6
 def forwardCell(hipAdjust = [0, 0, 0, 0, 0, 0]):
@@ -20,69 +17,66 @@ def forwardCell(hipAdjust = [0, 0, 0, 0, 0, 0]):
 
 # Updating heading when turning
 def kRight(k):
-    global robot_info
-
     # North(1)->East(2), East(2)->South(3), etc
     if k == DIRECTION.North:
-        robot_info[0] = DIRECTION.East
+        return DIRECTION.East
     elif k == DIRECTION.East:
-        robot_info[0] = DIRECTION.South
+        return DIRECTION.South
     elif k == DIRECTION.South:
-        robot_info[0] = DIRECTION.West
+        return DIRECTION.West
     elif k == DIRECTION.West:
-        robot_info[0] = DIRECTION.North
+        return DIRECTION.North
 
 def kLeft(k):
-    global robot_info
-
     # North(1)->West(4), West(4)->South(3), etc
     if k == DIRECTION.North:
-        robot_info[0] = DIRECTION.West
+        return DIRECTION.West
     elif k == DIRECTION.West:
-        robot_info[0] = DIRECTION.South
+        return DIRECTION.South
     elif k == DIRECTION.South:
-        robot_info[0] = DIRECTION.East
+        return DIRECTION.East
     elif k == DIRECTION.East:
-        robot_info[0] = DIRECTION.North
+        return DIRECTION.North
     
 def deltaPos(k):
-    global robot_info
-
     # i+ when going down, j+ going right. Top left is (0,0)
     if k == DIRECTION.North:
-        robot_info[1][0] -= 1
+        return (-1, 0)
     elif k == DIRECTION.East:
-        robot_info[1][1] += 1
+        return (0, 1)
     elif k == DIRECTION.South:
-        robot_info[1][0] += 1
+        return (1, 0)
     elif k == DIRECTION.West:
-        robot_info[1][1] -= 1
+        return (0, -1)
     
-def execMotion(action):
+def execMotion(frame, action):
     # Dict input for frame = {'i': int, 'j':int, k: one of the four directions}
     # String input for action = 'F', 'L', 'R', 'B' (Fowards, Left, Right, Backwards)
-    global robot_info
+
+    # action = action.upper() # in case someone types lowercase
 
     # Performs the movements and updates internal tracker (I think this works?)
     if action == 'F':
         forwardCell()
-        deltaPos(robot_info[0])
+        di, dj = deltaPos(frame['k'])
+        frame['i'] += di
+        frame['j'] += dj
 
     elif action == 'R':
         # When turning we dont actually move anywhere so the i and j doesn't change
         # Heading is the only thing that changes
         turnRight90()
-        kRight(robot_info[0])
+        frame['k'] = kRight(frame['k'])
 
     elif action == 'L':
         turnLeft90()
-        kLeft(robot_info[0])
+        frame['k'] = kLeft(frame['k'])
 
     elif action == "B":
         turn180()
-        kRight(robot_info[0])
-        kRight(robot_info[0])
+        frame['k'] = kRight(kRight(frame['k']))
 
+    return frame
 
 def userInput(prompt):
     # Inputs the string as 0 0 1 for example
@@ -106,82 +100,77 @@ def directionNames(k):
         return 'West'
 
 # Prints the current frame in the format x(i,j,k) [DIRECTION]
-def printFrame():
-    global robot_info
-    return "x(" + str(robot_info[1][0]) + "," + str(robot_info[1][1]) + "," + str(robot_info[0]) + ") [" + directionNames(robot_info[0]) + "]"
-
-def runActions(actions):
-    # Runs through all the actions
-    for step in range(len(actions)):
-        a = actions[step]
-        execMotion(a)
-        # Prints out current position
-        print("Step " + str(step) + ": " + a + " -> " + printFrame())
-
-def calc_heading_change(goal_dir, curr_dir):
-    heading_change = (goal_dir + 4 - curr_dir) % 4
-    
-    match heading_change:
-        case 1: 
-            return "R"
-        case 2:
-            return "B"
-        case 3:
-            return "L"
-        case _: 
-            return ""
+def printFrame(p):
+    return "x(" + str(p['i']) + "," + str(p['j']) + "," + str(p['k']) + ") [" + directionNames(p['k']) + "]"
 
 def localize():
-    global robot_info
-
     # Asks for the user to put in start and end positions
     x_s = userInput("x_s/Starting Position (i j k): ")
     x_g = userInput("\n x_g/Ending Position (i j k): ")
+
+    print("\n Start: ", printFrame(x_s))
+    print("\n End: ", printFrame(x_g))
 
     # actions = input("\n Enter a string of actions (ex:FBRLR): ").upper()
 
     actions = ''
 
-    # set heading
-    robot_info[0] = x_s['k']
-    robot_info[1] = [x_s['i'], x_s['j']]
-    print("\n Start: ", printFrame())
+    # find south
+    heading = 3 - x_s['k']
 
-    actions = ''
-    i_dst = x_g['i'] - robot_info[1][0]
-    
+    if heading > 0:
+        for h in range(abs(heading)):
+            print(h)
+            actions += "R"
+    else:
+        for h in range(abs(heading)):
+            print(h)
+            actions += "L"
+
+    # move south if i_end - i_start > 0, else move north
+    start_dir = x_s['k']
+
     # move i_dst amount
-    if i_dst > 0: # move i_dst south
-        actions += calc_heading_change(DIRECTION.South, robot_info[0])
-    elif i_dst < 0:
-        actions += calc_heading_change(DIRECTION.North, robot_info[0])
-
+    i_dst = x_g['i'] - x_s['i']
+    if i_dst < 0:
+        find_direction(start_dir, DIRECTION.North)
+        actions += "B"
+    
     for i in range(abs(i_dst)):
         actions += "F"
 
-    runActions(actions)
-
-    actions = ''
-    j_dst = x_g['j'] - robot_info[1][1]
-    # move j_dst amount
-    if j_dst > 0: # move east
-        actions += calc_heading_change(DIRECTION.East, robot_info[0])
-    elif j_dst < 0: # move west
-        actions += calc_heading_change(DIRECTION.West, robot_info[0])
-
-    for i in range(abs(j_dst)):
+    # turn left if j_end - j_start > 0, else turn right & move forward j_dst
+    j_dst = x_g['j'] - x_s['j']
+    if j_dst > 0:
+        actions += "L"
+    else:
+        actions += "R"
+    
+    for j in range(abs(j_dst)):
         actions += "F"
 
-    runActions(actions)
-
-    actions = ''
-    
     # change heading at end
-    actions += calc_heading_change(x_g['k'], robot_info[0])
+    heading = x_g['k'] - x_s['k']
+    if heading > 0:
+        for h in range(1, abs(heading)):
+            print(h)
+            actions += "R"
+    else:
+        for h in range(1, abs(heading)):
+            print(h)
+            actions += "L"
 
-    runActions(actions)
+    print(actions)
 
-    print("\n End: ", printFrame())
+    # Updates the frame in exec_motion
+    frame = x_s
+
+    # Runs through all the actions
+    for step in range(len(actions)):
+        a = actions[step]
+        execMotion(frame, a)
+        # Prints out current position
+        print("Step " + str(step) + ": " + a + " -> " + printFrame(frame))
     
 if __name__ == "__main__":
     localize()

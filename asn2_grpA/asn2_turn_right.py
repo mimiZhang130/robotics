@@ -6,14 +6,14 @@ from asn2_movement import makeStep, send_positions
 import time
 
 OG_HIP = 500
-TURN_HIP = 300
+TURN_HIP = 325
 TIME_SLEEP = .3
 
 def turnRight():
     # Step 1: Lift and move tripod group A where legs 1 & 3 move forwards & 5 moves backwards 
     step1 = makeStep(
         hip = {1:TURN_HIP, 3:TURN_HIP, 5:TURN_HIP},
-        knee = {1:213, 3:320, 5:686}
+        knee = {1:213, 3:220, 5:786}
     )
 
     send_positions(.3, step1) 
