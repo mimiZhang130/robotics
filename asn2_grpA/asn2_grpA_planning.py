@@ -2,7 +2,9 @@
 from asn2_grpA import DIRECTION, CSME301Map
 # https://docs.python.org/3/library/heapq.html
 from heapq import *
-from asn2_grpA_localization_testing import runActions
+# from asn2_grpA_localization_testing import runActions
+from asn2_grpA_localization import runActions
+from asn2_initialization import initialization
 
 # parse user input into a dict with i, j, k values
 def userInput(prompt):
@@ -148,6 +150,9 @@ if __name__ == '__main__':
     # create cost map
     setCostGrid()
     # map.setCost(x_s['i'], x_s['j'], 0)
+
+    # initialize robot
+    initialization()
 
     # generate a path from xs to xg
     a_star(x_s, x_g)

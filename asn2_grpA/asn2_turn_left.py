@@ -2,7 +2,7 @@ from asn2_movement import makeStep, send_positions
 import time
 
 OG_HIP = 500
-TURN_HIP = 575
+TURN_HIP = 685
 TIME_SLEEP = .3
 def turnLeft():
     # Step 1: Lift and move tripod group A where legs 1 & 3 move forwards & 5 moves backwards 
@@ -33,7 +33,7 @@ def turnLeft():
 
     # Step 4: Put tripod group B back on the ground
     step4 = makeStep(
-        knee = {2: 312, 4: 686, 6: 686}
+        knee = {2:270, 4:690, 6:690}
     )
     send_positions(.2, step4)
     time.sleep(TIME_SLEEP)

@@ -1,22 +1,27 @@
 # General Notes: I think this works (if i did the math in my head right). Maybe add more validation for the inputs and stuff 
 # so that like numbers outside of the accpetable range can't be inputed? Otherwise hopefully this works 
 
-# from asn2_tripod import tripodCycle
-# from asn2_turn_left import turnLeft90
-# from asn2_turn_right import turnRight90
-# from asn2_turn_180 import turn180
+from asn2_tripod import tripodCycle
+from asn2_turn_left import turnLeft90
+from asn2_turn_right import turnRight90
+from asn2_turn_180 import turn180
 
 # Importing set directions (k) and map
 from asn2_grpA import DIRECTION, CSME301Map
+import time
+from asn1_feedback_correction import left_correction, inputGains
 
 # robot info stores current direction & location
 # robot_info = [DIRECTION.South, [0, 0]]
 
 # Move forward one cell block (center-to-center)
-# cycles_per_cell = 6
-# def forwardCell(hipAdjust = [0, 0, 0, 0, 0, 0]):
-#     for i in range(cycles_per_cell):
-#         tripodCycle(hipAdjusts=hipAdjust)
+cycles_per_cell = 6
+def forwardCell(hipAdjust = [0, 0, 0, 0, 0, 0]):
+    for i in range(cycles_per_cell):
+        prev_time = 0
+        curr_time = time.time()
+        inputGains()
+        left_correction(prev_time, curr_time)
 
 # Updating heading when turning
 def kRight(robot_info):
@@ -63,21 +68,21 @@ def execMotion(action, robot_info):
     # String input for action = 'F', 'L', 'R', 'B' (Fowards, Left, Right, Backwards)
     # Performs the movements and updates internal tracker (I think this works?)
     if action == 'F':
-        # forwardCell()
+        forwardCell()
         robot_info = deltaPos(robot_info)
 
     elif action == 'R':
         # When turning we dont actually move anywhere so the i and j doesn't change
         # Heading is the only thing that changes
-        # turnRight90()
+        turnRight90()
         robot_info = kRight(robot_info)
 
     elif action == 'L':
-        # turnLeft90()
+        turnLeft90()
         robot_info = kLeft(robot_info)
 
     elif action == "B":
-        # turn180()
+        turn180()
         robot_info = kRight(robot_info)
         robot_info = kRight(robot_info)
 
@@ -166,7 +171,7 @@ def localize():
 
     for i in range(abs(j_dst)):
         actions += "F"
-
+    print("actions: " + actions)
     runActions(actions, robot_info)
 
     actions = ''
