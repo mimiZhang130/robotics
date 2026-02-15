@@ -19,10 +19,10 @@ def enum(**enums):
 DIRECTION = enum(North=1, East=2, South=3, West=4)
 
 class CSME301Map():
-    def __init__(self):
+    def __init__(self, rows=4, cols=6):
 
-        n_row = 4
-        n_col = 6
+        n_row = rows
+        n_col = cols
 
         self.obstacle_size_row = n_row
         self.obstacle_size_col = n_col
@@ -106,7 +106,6 @@ class CSME301Map():
         self.verticalWalls[3][4] = 1
         self.verticalWalls[3][5] = 0
         self.verticalWalls[3][6] = 1
-
         
     # ***********************************************************************
     # Function Name : getNeighborObstacle
@@ -383,15 +382,15 @@ class CSME301Map():
             return self.obstacle_size_col
 
 def main():
-    your_map = CSME301Map()
+    your_map = CSME301Map(8, 8)
 
     # your_map.printObstacleMap()
     # your_map.clearObstacleMap()
     # your_map.printCostMap()
-    your_map.setObstacle(3, 4, 1, DIRECTION.East)
+    # your_map.setObstacle(3, 4, 1, DIRECTION.East)
     # isBlocked = your_map.getObstacle(3, 4, DIRECTION.North)
-    cell_cost = your_map.getCost(3, 4)
-    print("cell cost", cell_cost)
+    # cell_cost = your_map.getCost(3, 4)
+    # print("cell cost", cell_cost)
     your_map.printObstacleMap()
 
 if __name__ == "__main__":

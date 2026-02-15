@@ -1,5 +1,4 @@
 from asn2_tripod import tripodCycle
-from asn2_walk import checkBlockedandRotate
 import sonar
 from asn2_movement import sensor_right, sensor_left, sensor_reset
 import time
@@ -73,8 +72,6 @@ def right_correction(prev_time, curr_time):
     measured_f = None
 
     while True:
-        checkBlockedandRotate()
-
         # calculate times since last measured
         prev_time = curr_time
         curr_time = time.time()
@@ -120,8 +117,6 @@ def left_correction(prev_time, curr_time):
     measured_f = None
 
     while True:
-        checkBlockedandRotate()
-
         # calculate times since last measured
         prev_time = curr_time
         curr_time = time.time()
