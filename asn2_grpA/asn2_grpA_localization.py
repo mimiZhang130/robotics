@@ -1,7 +1,7 @@
 # General Notes: I think this works (if i did the math in my head right). Maybe add more validation for the inputs and stuff 
 # so that like numbers outside of the accpetable range can't be inputed? Otherwise hopefully this works 
 
-from asn2_tripod import tripodCycle
+from asn2_tripod import tripodCycle, recenter
 from asn2_turn_left import turnLeft90
 from asn2_turn_right import turnRight90
 from asn2_turn_180 import turn180
@@ -18,6 +18,9 @@ cycles_per_cell = 6
 def forwardCell(hipAdjust = [0, 0, 0, 0, 0, 0]):
     for i in range(cycles_per_cell):
         tripodCycle(hipAdjusts=hipAdjust)
+
+    # Now strafe left or right
+    recenter()
 
 # Updating heading when turning
 def kRight(robot_info):
