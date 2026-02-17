@@ -3,9 +3,12 @@
         # being lifted and moved forward (or backward) simultaneously, followed by 
         # the next pair and so forth, creating a “ripple” effect.
 from asn2_movement import makeStep, send_positions
+from asn2_movement import sensor_right, sensor_left, sensor_reset
 import time
+import sonar
 
 OG_HIP = 500
+s = sonar.Sonar()
 
 def tripodCycle(hipAdjusts = [0, 0, 0, 0, 0, 0]):
     # Step 1: Lifting and moving forwards Tripod Group A 
@@ -42,6 +45,62 @@ def tripodCycle(hipAdjusts = [0, 0, 0, 0, 0, 0]):
 
     send_positions(.2, step4)
     time.sleep(.3)
+
+def strafeLeft(cycles=1, magnitude=15):
+    for i in range(cycles):
+        hip_adjusts = [
+            magnitude,  # left legs
+            magnitude, 
+            magnitude,  
+            -magnitude,  # right legs
+            -magnitude,  
+            -magnitude   
+        ]
+        tripodCycle(hipAdjusts=hip_adjusts)
+
+def strafeRight(cycles=1, magnitude=15):
+    for _ in range(cycles):
+        hip_adjusts = [
+            -magnitude,  # left legs
+            -magnitude,
+            -magnitude,
+            magnitude,  # right legs
+            magnitude,
+            magnitude
+        ]
+        tripodCycle(hipAdjusts=hip_adjusts)
+
+def recenter():
+    tolerance = 5
+
+    # Look right
+    sensor_right()
+    time.sleep(.5)
+    right_dist = s.getDistance()
+
+    # Look left
+    sensor_left()
+    time.sleep(.5)
+    left_dist = s.getDistance()
+
+    # Reset sensor to forward
+    sensor_reset()
+
+    # Compute lateral offset
+    offset = right_dist - left_dist
+
+    print("Left:", left_dist)
+    print("Right:", right_dist)
+    print("Center error:", offset)
+
+    # If right is larger, we are too close to left wall
+    if (left_dist > 500) or (right_dist > 500):
+        pass
+    elif offset > tolerance:
+        strafeRight(cycles=1)
+    elif offset < -tolerance:
+        strafeLeft(cycles=1)
+
 
 if __name__ == '__main__':  
     # allow us to read in step size from terminal argument
