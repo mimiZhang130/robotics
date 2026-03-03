@@ -1,5 +1,6 @@
 import time
 import common.ros_robot_controller_sdk as rrc
+import math
 
 '''
     程序功能：IMU例程(MPU6050)(Program function: IMU(MPU6050))
@@ -11,12 +12,28 @@ import common.ros_robot_controller_sdk as rrc
 board = rrc.Board()
 board.enable_reception()
 
+
 while True:
     try:
         res = board.get_imu()          # 获取IMU数据(obtain IMU data)
-        if res is not None:
-            print(res)           # 输出获取到的IMU数据(output the obtained IMU data)
+        time.sleep(1)
         
-        time.sleep(0.01)
+        if res is not None:
+            # print(res)           # 输出获取到的IMU数据(output the obtained IMU data)
+            print(f"Acceleration: X:{res[0]:.2f}, Y:{res[1]:.2f}, Z:{res[2]} m/s^2")
+            print(f"Gyro: X:{res[3]:.2f}, Y:{res[4]:.2f}, Z:{res[5]:.2f} deg/s")
+
+            acc_mag = math.sqrt(res[0]^2 + res[1]^2 + res[2]^2)
+
+            print(acc_mag)
+
+            # start = time.time()
+            # for i in range(1000):
+            #     board.get_imu()
+            # end = time.time()
+            # print("Rate:", 1000/(end-start))
+
+        # time.sleep(0.01)
+        time.sleep(2)
     except KeyboardInterrupt:
         break
