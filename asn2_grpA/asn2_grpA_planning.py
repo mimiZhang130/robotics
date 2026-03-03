@@ -108,7 +108,6 @@ def a_star(x_s, x_g):
                 heappush(not_seen_heap, (f_score, neighbor))
                 seen.append(neighbor)
                 path_tracker[neighbor] = (curr_cell, action)
-                # TODO: NOT SURE IF I'VE CAUGHT UP
                 map.setCost(neighbor[0], neighbor[1], g_score)
 
     print("FAILED IF WE REACHED HERE :(")

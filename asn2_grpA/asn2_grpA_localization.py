@@ -20,7 +20,7 @@ def forwardCell(hipAdjust = [0, 0, 0, 0, 0, 0]):
         tripodCycle(hipAdjusts=hipAdjust)
 
     # Now strafe left or right
-    recenter()
+    # recenter()
 
 # Updating heading when turning
 def kRight(robot_info):

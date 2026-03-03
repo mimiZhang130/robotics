@@ -17,8 +17,8 @@ def tripodCycle(hipAdjusts = [0, 0, 0, 0, 0, 0]):
         knee = {1:212, 3:220, 5:786}
     )
     
-    send_positions(.3, step1) 
-    time.sleep(.3)
+    send_positions(.2, step1) 
+    time.sleep(.2)
     
     # Step 2: Put down Tripod Group A
     step2 = makeStep(
@@ -26,7 +26,7 @@ def tripodCycle(hipAdjusts = [0, 0, 0, 0, 0, 0]):
     )
 
     send_positions(.2, step2)
-    time.sleep(.3)
+    time.sleep(.2)
 
     # Step 3: Return Tripod Group A to OG position and lift Tripod Group B
     step3 = makeStep(
@@ -35,16 +35,16 @@ def tripodCycle(hipAdjusts = [0, 0, 0, 0, 0, 0]):
         knee = {2:212, 4:786, 6:786 }
     )
 
-    send_positions(.3, step3)
-    time.sleep(.3)
+    send_positions(.2, step3)
+    time.sleep(.2)
 
     # Step 4: Put tripod group B back on the ground
     step4 = makeStep(
-        knee = {2:270, 4:690, 6:690}
+        knee = {2:270, 4:693, 6:693}
     )
 
     send_positions(.2, step4)
-    time.sleep(.3)
+    time.sleep(.2)
 
 def strafeLeft(cycles=1, magnitude=15):
     for i in range(cycles):

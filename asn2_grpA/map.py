@@ -19,10 +19,10 @@ def enum(**enums):
 DIRECTION = enum(North=1, East=2, South=3, West=4)
 
 class CSME301Map():
-    def __init__(self, rows=4, cols=6):
+    def __init__(self):
 
-        n_row = rows
-        n_col = cols
+        n_row = 4
+        n_col = 6
 
         self.obstacle_size_row = n_row
         self.obstacle_size_col = n_col
@@ -38,75 +38,75 @@ class CSME301Map():
         for i in range(n_row):
             for j in range(n_col):
                 self.costMap[i][j] = 0
+        
+        self.horizontalWalls[0][0] = 1
+        self.horizontalWalls[0][1] = 1
+        self.horizontalWalls[0][2] = 1
+        self.horizontalWalls[0][3] = 1
+        self.horizontalWalls[0][4] = 1
+        self.horizontalWalls[0][5] = 1
 
-        if (n_row > 3 and n_col > 5):
-            self.horizontalWalls[0][0] = 1
-            self.horizontalWalls[0][1] = 1
-            self.horizontalWalls[0][2] = 1
-            self.horizontalWalls[0][3] = 1
-            self.horizontalWalls[0][4] = 1
-            self.horizontalWalls[0][5] = 1
+        self.horizontalWalls[1][0] = 0
+        self.horizontalWalls[1][1] = 1
+        self.horizontalWalls[1][2] = 0
+        self.horizontalWalls[1][3] = 1
+        self.horizontalWalls[1][4] = 1
+        self.horizontalWalls[1][5] = 0
+        
+        self.horizontalWalls[2][0] = 0
+        self.horizontalWalls[2][1] = 0
+        self.horizontalWalls[2][2] = 0
+        self.horizontalWalls[2][3] = 0
+        self.horizontalWalls[2][4] = 0
+        self.horizontalWalls[2][5] = 0
 
-            self.horizontalWalls[1][0] = 0
-            self.horizontalWalls[1][1] = 1
-            self.horizontalWalls[1][2] = 0
-            self.horizontalWalls[1][3] = 1
-            self.horizontalWalls[1][4] = 1
-            self.horizontalWalls[1][5] = 0
-            
-            self.horizontalWalls[2][0] = 0
-            self.horizontalWalls[2][1] = 0
-            self.horizontalWalls[2][2] = 0
-            self.horizontalWalls[2][3] = 0
-            self.horizontalWalls[2][4] = 0
-            self.horizontalWalls[2][5] = 0
+        self.horizontalWalls[3][0] = 1
+        self.horizontalWalls[3][1] = 1
+        self.horizontalWalls[3][2] = 0
+        self.horizontalWalls[3][3] = 0
+        self.horizontalWalls[3][4] = 0
+        self.horizontalWalls[3][5] = 0
 
-            self.horizontalWalls[3][0] = 1
-            self.horizontalWalls[3][1] = 1
-            self.horizontalWalls[3][2] = 0
-            self.horizontalWalls[3][3] = 0
-            self.horizontalWalls[3][4] = 0
-            self.horizontalWalls[3][5] = 0
+        self.horizontalWalls[4][0] = 1
+        self.horizontalWalls[4][1] = 1
+        self.horizontalWalls[4][2] = 1
+        self.horizontalWalls[4][3] = 1
+        self.horizontalWalls[4][4] = 1
+        self.horizontalWalls[4][5] = 1
 
-            self.horizontalWalls[4][0] = 1
-            self.horizontalWalls[4][1] = 1
-            self.horizontalWalls[4][2] = 1
-            self.horizontalWalls[4][3] = 1
-            self.horizontalWalls[4][4] = 1
-            self.horizontalWalls[4][5] = 1
+        self.verticalWalls[0][0] = 1
+        self.verticalWalls[0][1] = 0
+        self.verticalWalls[0][2] = 0
+        self.verticalWalls[0][3] = 1
+        self.verticalWalls[0][4] = 1
+        # self.verticalWalls[0][4] = 0  # no wall on the right side of the map 
+        self.verticalWalls[0][5] = 0
+        self.verticalWalls[0][6] = 1
 
-            self.verticalWalls[0][0] = 1
-            self.verticalWalls[0][1] = 0
-            self.verticalWalls[0][2] = 0
-            self.verticalWalls[0][3] = 1
-            self.verticalWalls[0][4] = 1
-            # self.verticalWalls[0][4] = 0  # no wall on the right side of the map 
-            self.verticalWalls[0][5] = 0
-            self.verticalWalls[0][6] = 1
+        self.verticalWalls[1][0] = 1
+        self.verticalWalls[1][1] = 1
+        self.verticalWalls[1][2] = 1
+        self.verticalWalls[1][3] = 1
+        self.verticalWalls[1][4] = 0
+        self.verticalWalls[1][5] = 1
+        self.verticalWalls[1][6] = 1
 
-            self.verticalWalls[1][0] = 1
-            self.verticalWalls[1][1] = 1
-            self.verticalWalls[1][2] = 1
-            self.verticalWalls[1][3] = 1
-            self.verticalWalls[1][4] = 0
-            self.verticalWalls[1][5] = 1
-            self.verticalWalls[1][6] = 1
+        self.verticalWalls[2][0] = 1
+        self.verticalWalls[2][1] = 0
+        self.verticalWalls[2][2] = 1
+        self.verticalWalls[2][3] = 1
+        self.verticalWalls[2][4] = 1
+        self.verticalWalls[2][5] = 1
+        self.verticalWalls[2][6] = 1
 
-            self.verticalWalls[2][0] = 1
-            self.verticalWalls[2][1] = 0
-            self.verticalWalls[2][2] = 1
-            self.verticalWalls[2][3] = 1
-            self.verticalWalls[2][4] = 1
-            self.verticalWalls[2][5] = 1
-            self.verticalWalls[2][6] = 1
+        self.verticalWalls[3][0] = 1
+        self.verticalWalls[3][1] = 0
+        self.verticalWalls[3][2] = 0
+        self.verticalWalls[3][3] = 0
+        self.verticalWalls[3][4] = 1
+        self.verticalWalls[3][5] = 0
+        self.verticalWalls[3][6] = 1
 
-            self.verticalWalls[3][0] = 1
-            self.verticalWalls[3][1] = 0
-            self.verticalWalls[3][2] = 0
-            self.verticalWalls[3][3] = 0
-            self.verticalWalls[3][4] = 1
-            self.verticalWalls[3][5] = 0
-            self.verticalWalls[3][6] = 1
         
     # ***********************************************************************
     # Function Name : getNeighborObstacle
@@ -127,14 +127,7 @@ class CSME301Map():
                  and (dir == DIRECTION.North or dir == DIRECTION.South))):
             print("ERROR (getNeighborObstacle): index out of range")
             return -1
-        # if (i == 0 and dir == DIRECTION.North):
-        #     return 1
-        # if (j == 0 and dir == DIRECTION.West):
-        #     return 1
-        # if (i == self.obstacle_size_row - 1 and dir == DIRECTION.South):
-        #     return 1
-        # if (j == self.obstacle_size_col - 1 and dir == DIRECTION.East):
-        #     return 1
+
         isBlocked = 0
         if dir == DIRECTION.North:
             isBlocked = self.horizontalWalls[i][j]
@@ -337,22 +330,22 @@ class CSME301Map():
         for i in range(self.costmap_size_row):
             for j in range(self.costmap_size_col):
                 if (self.horizontalWalls[i][j] == 0):
-                    # if i == 0:
-                    #     sys.stdout.write(" ---")
-                    # else:
-                    sys.stdout.write("    ")
+                    if i == 0:
+                        sys.stdout.write(" ---")
+                    else:
+                        sys.stdout.write("    ")
                 else:
                     sys.stdout.write(" ---")
 
             print(" ")
             for j in range(self.costmap_size_col):
                 if (self.verticalWalls[i][j] == 0):
-                    # if j == self.costmap_size_col - 1:
-                    #     sys.stdout.write("  O |")
-                    # elif j == 0:
-                    #     sys.stdout.write("| O ")
-                    # else:
-                    sys.stdout.write("  O ")
+                    if j == self.costmap_size_col - 1:
+                        sys.stdout.write("  O |")
+                    elif j == 0:
+                        sys.stdout.write("| O ")
+                    else:
+                        sys.stdout.write("  O ")
                 else:
                     if j == self.costmap_size_col - 1:
                         sys.stdout.write("| O |")
@@ -395,10 +388,10 @@ def main():
     your_map.printObstacleMap()
     # your_map.clearObstacleMap()
     # your_map.printCostMap()
-    # your_map.setObstacle(3, 4, 1, DIRECTION.East)
+    your_map.setObstacle(3, 4, 1, DIRECTION.East)
     # isBlocked = your_map.getObstacle(3, 4, DIRECTION.North)
-    # cell_cost = your_map.getCost(3, 4)
-    # print("cell cost", cell_cost)
+    cell_cost = your_map.getCost(3, 4)
+    print("cell cost", cell_cost)
     your_map.printObstacleMap()
 
 if __name__ == "__main__":

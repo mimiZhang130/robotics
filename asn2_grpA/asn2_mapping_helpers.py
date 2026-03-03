@@ -12,7 +12,7 @@ def check_right():
     rightDistance = s.getDistance()
     print("right distance: " + str(rightDistance))
     sensor_reset()
-    if rightDistance < 350:
+    if rightDistance < 500:
         return True
     else:
         return False
@@ -22,26 +22,47 @@ def check_left():
     leftDistance = s.getDistance()
     print("left distance: " + str(leftDistance))
     sensor_reset()
-    if leftDistance < 350:
+    if leftDistance < 500:
         return True
     else:
+        return False
+
+def check_180():
+    turn180()
+    distance = s.getDistance()
+    print("back distance: " + str(distance))
+    if distance < 500: # yes wall
+        turn180()
+        return True
+    else: # no wall
+        # turn180()
         return False
     
 # returns whether we have a wall on the left, right, or in front of the robot
 def check_directions(curr_direction, direction):
     heading_change = (direction + 4 - curr_direction) % 4
     if heading_change == 1:
-        return check_right()
+        return (check_right(), curr_direction)
     elif heading_change == 3:
-        return check_left()
+        return (check_left(), curr_direction)
+    elif heading_change == 2:
+        wall = check_180()
+        if wall:
+            return (wall, curr_direction)
+        else:
+            return (wall, direction)
     elif heading_change == 0:
         sensor_reset()
-        return s.getDistance() < 350
+        frontDistance = s.getDistance()
+        print("front distance: " + str(frontDistance))
+        return (frontDistance < 750, curr_direction)
 
     return "ERROR OUT"
     
 # turn from curr_direction to direction
 def turn_to_direction(curr_direction, direction):
+    if curr_direction == direction:
+        return 
     heading_change = (direction + 4 - curr_direction) % 4
     if heading_change == 1:
         turnRight90()
@@ -50,14 +71,15 @@ def turn_to_direction(curr_direction, direction):
     elif heading_change == 3:
         turnLeft90()
 
+def get_opp_direction(curr_direction):
+    return (curr_direction + 1) % 4 + 1
+
 # walk one tile forward
 cycles_per_cell = 6
 def forward_cell(hipAdjust = [0, 0, 0, 0, 0, 0]):
     for i in range(cycles_per_cell):
         tripodCycle(hipAdjusts=hipAdjust)
 
-def get_opp_direction(curr_direction):
-    return (curr_direction + 1) % 4 + 1
 
 if __name__ == '__main__':  
     # initialization()

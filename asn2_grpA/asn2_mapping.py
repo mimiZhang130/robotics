@@ -40,6 +40,7 @@ def explore_from_tile(world, robot_info, walked_tiles):
 
     # visit i, j neighbors that are not blocked / already visited
     for neighbor_k in get_neighbors(i, j, world, walked_tiles):
+        print(f"checking neighbor_k: {neighbor_k}")
         wall = check_directions(robot_info[2], neighbor_k)
         
         # if there's a wall, record it
@@ -59,7 +60,7 @@ def explore_from_tile(world, robot_info, walked_tiles):
         world.printObstacleMap()
         # recurse 
         explore_from_tile(world, robot_info, walked_tiles)
-
+        
         # backtrack
         print("Backtracking")
 
@@ -75,11 +76,10 @@ def explore_from_tile(world, robot_info, walked_tiles):
         turn_to_direction(robot_info[2], k)
         robot_info[2] = k
         
-        
 if __name__ == '__main__':
-    world = CSME301Map(2, 2)
+    world = CSME301Map(3, 2)
     world.clearObstacleMap()
-    robot_info = [0, 0, 3] # we assume the robot starts at 0, 0 facing south
+    robot_info = [0, 0, 1] # we assume the robot starts at 0, 0 facing north
     explore_world(world, robot_info)
     # see how we did
     world.printObstacleMap()
