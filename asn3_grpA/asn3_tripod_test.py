@@ -50,33 +50,57 @@ def tripodCycle(hipAdjusts = [0, 0]):
     send_positions(.2, step4)
     time.sleep(.2)
 
+def get_hip_adjusts(in_maze, model, batteryLevel):
+    if in_maze == "maze":
+        if model == "knn":
+            hipAdjusts = run_knn_maze(batteryLevel)
+        else:
+            hipAdjusts = run_gaussian_maze(batteryLevel)
+    elif in_maze == "not maze":
+        if model == "knn":
+            hipAdjusts = run_knn_out_maze(batteryLevel)
+        else:
+            hipAdjusts = run_gaussian_out_maze(batteryLevel)
+    else:
+        if model == "knn":
+            hipAdjusts = run_knn_all(batteryLevel)
+        else:
+            hipAdjusts = run_gaussian_all(batteryLevel)
+    return hipAdjusts
+
 if __name__ == '__main__':  
     # allow us to read in step size from terminal argument
     while True:
         userInput = input("data type (maze, not maze, all): ")
         userInput2 = input("model (knn, gaussian): ")
         in_maze = userInput.strip()
-        model = userInput2.strip()
+        model_type = userInput2.strip()
+
+        if in_maze == "maze":
+            if model_type == "knn":
+                model = run_knn_maze()
+            else:
+                model = run_gaussian_maze()
+        elif in_maze == "not maze":
+            if model_type == "knn":
+                model = run_knn_out_maze()
+            else:
+                model = run_gaussian_out_maze()
+        else:
+            if model_type == "knn":
+                model = run_knn_all()
+            else:
+                model = run_gaussian_all()
+
+        hipAdjusts = model(batteryLevel)
+        
         # get battery level in volts
         batteryLevel = board.get_battery() / 1000
-        if in_maze == "maze":
-            if model == "knn":
-                hipAdjusts = run_knn_maze(batteryLevel)
-            else:
-                hipAdjusts = run_gaussian_maze(batteryLevel)
-        elif in_maze == "not maze":
-            if model == "knn":
-                hipAdjusts = run_knn_out_maze(batteryLevel)
-            else:
-                hipAdjusts = run_gaussian_out_maze(batteryLevel)
-        else:
-            if model == "knn":
-                hipAdjusts = run_knn_all(batteryLevel)
-            else:
-                hipAdjusts = run_gaussian_all(batteryLevel)
-        print(hipAdjusts)
+        get_hip_adjusts(in_maze, model, batteryLevel)
         for i in range(20):
             if i % 4 == 0:
+                hipAdjusts = model(batteryLevel)
+                print(f"Readjusting hipAdjusts: {hipAdjusts}")
                 print(board.get_battery())
             tripodCycle(hipAdjusts)
         time.sleep(1)

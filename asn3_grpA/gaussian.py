@@ -50,26 +50,26 @@ class Gaussian:
 
 weight = .4
 
-def run_gaussian_maze(battery_level, weight = weight):
+def run_gaussian_maze(weight = weight):
     gaussian = Gaussian(weight) 
 
     gaussian.fit(maze_x_data, maze_y_data) 
 
-    return gaussian.predict(battery_level)
+    return gaussian
 
-def run_gaussian_out_maze(battery_level, weight = weight):
+def run_gaussian_out_maze(weight = weight):
     gaussian = Gaussian(weight) 
     
     gaussian.fit(out_maze_x_data, out_maze_y_data) 
 
-    return gaussian.predict(battery_level)
+    return gaussian
 
-def run_gaussian_all(battery_level, weight = weight):
+def run_gaussian_all(weight = weight):
     gaussian = Gaussian(weight) 
     
     gaussian.fit(x_data, y_data) 
 
-    return gaussian.predict(battery_level)
+    return gaussian
 
 def tune_sigma():
     # perform cross validation
@@ -88,4 +88,6 @@ def tune_sigma():
     print(best_weight)
 
 if __name__ == '__main__':
-    tune_sigma()
+    # tune_sigma()
+    model = run_gaussian_out_maze()
+    print(model.predict(10.2))

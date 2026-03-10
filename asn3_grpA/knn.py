@@ -50,26 +50,26 @@ class KNN:
 
         return (hip4, hip6)
 
-def run_knn_maze(battery_level, neighbors=neighbors):
+def run_knn_maze(neighbors=neighbors):
     knn = KNN(neighbors) 
 
     knn.fit(maze_x_data, maze_y_data) 
 
-    return knn.predict(battery_level)
+    return knn
 
-def run_knn_out_maze(battery_level, neighbors=neighbors):
+def run_knn_out_maze(neighbors=neighbors):
     knn = KNN(neighbors) 
     
     knn.fit(out_maze_x_data, out_maze_y_data) 
 
-    return knn.predict(battery_level)
+    return knn
 
-def run_knn_all(battery_level, neighbors=neighbors):
+def run_knn_all(neighbors=neighbors):
     knn = KNN(neighbors) 
     
     knn.fit(x_data, y_data) 
 
-    return knn.predict(battery_level)
+    return knn
 
 if __name__ == '__main__':
 
