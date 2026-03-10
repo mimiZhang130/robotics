@@ -1,7 +1,7 @@
 import math
 import heapq
 from collections import Counter
-from data import x_data, y_data, maze_x_data, maze_y_data, out_maze_x_data, out_maze_y_data, split_data, test_data
+from data import create_data, maze_x_data, maze_y_data, out_maze_x_data, out_maze_y_data, split_data, test_data
 
 neighbors = 5
 
@@ -64,9 +64,11 @@ def run_knn_out_maze(neighbors=neighbors):
 
     return knn
 
-def run_knn_all(neighbors=neighbors):
+def run_knn_combo(maze, out_maze, out_maze_2, neighbors=neighbors):
     knn = KNN(neighbors) 
     
+    x_data, y_data = create_data(maze, out_maze, out_maze_2)
+
     knn.fit(x_data, y_data) 
 
     return knn

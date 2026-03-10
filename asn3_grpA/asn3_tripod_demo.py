@@ -53,7 +53,7 @@ def tripodCycle(hipAdjusts = [0, 0]):
 if __name__ == '__main__':  
     # allow us to read in step size from terminal argument
     while True:
-        userInput = input("data type (maze, not maze, all): ")
+        userInput = input("data type (maze, not maze, combo): ")
         floor_type = userInput.strip()
         if floor_type == "combo":
             maze = input("maze (yes/no): ") == "yes"
@@ -61,8 +61,10 @@ if __name__ == '__main__':
             out_maze_2 = input("out_maze_2 (yes/no): ") == "yes"
 
         userInput2 = input("model (knn, gaussian): ")
-        model_type = userInput2.strip()
+        userInput3 = input("battery_level: ")
         
+        model_type = userInput2.strip()
+        batteryLevel = int(userInput3.strip())
 
         if floor_type == "maze":
             if model_type == "knn":
@@ -75,23 +77,18 @@ if __name__ == '__main__':
             else:
                 model = run_gaussian_out_maze()
         else:
+            
             if model_type == "knn":
                 model = run_knn_combo(maze, out_maze, out_maze_2)
             else:
                 model = run_gaussian_combo(maze, out_maze, out_maze_2)
 
         # get battery level in volts
-        batteryLevel = board.get_battery() / 1000
         hipAdjusts = model.predict(batteryLevel)
         print(f"Starting battery level: {batteryLevel}")
         print(f"Starting hipAdjusts: {hipAdjusts}")
 
         for i in range(20):
-            if i % 4 == 0:
-                batteryLevel = board.get_battery()
-                hipAdjusts = model.predict(batteryLevel)
-                print(f"Battery Level: {batteryLevel}")
-                print(f"Readjusting hipAdjusts: {hipAdjusts}")
             tripodCycle(hipAdjusts)
         time.sleep(1)
         initialization()

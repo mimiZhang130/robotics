@@ -1,7 +1,7 @@
 import math
 from collections import Counter
 # https://www.emergentmind.com/topics/gaussian-based-knn-resampling-gkr
-from data import x_data, y_data, maze_x_data, maze_y_data, out_maze_x_data, out_maze_y_data, split_data, test_data
+from data import create_data, maze_x_data, maze_y_data, out_maze_x_data, out_maze_y_data, split_data, test_data
 
 class Gaussian:
     def __init__(self, weight = 1.0):
@@ -64,9 +64,11 @@ def run_gaussian_out_maze(weight = weight):
 
     return gaussian
 
-def run_gaussian_all(weight = weight):
+def run_gaussian_combo(maze, out_maze, out_maze_2, weight = weight):
     gaussian = Gaussian(weight) 
     
+    x_data, y_data = create_data(maze, out_maze, out_maze_2)
+
     gaussian.fit(x_data, y_data) 
 
     return gaussian
