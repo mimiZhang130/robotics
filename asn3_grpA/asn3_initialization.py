@@ -38,3 +38,4 @@ def initialization ():
 if __name__ == '__main__':
     # Initializes the robot to starting position (spider?)
     initialization()
+    

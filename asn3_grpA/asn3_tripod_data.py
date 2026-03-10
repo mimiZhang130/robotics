@@ -4,8 +4,13 @@
         # the next pair and so forth, creating a “ripple” effect.
 from asn3_movement import makeStep, send_positions
 import time
+from asn3_initialization import initialization
+import common.ros_robot_controller_sdk as rrc
 
 OG_HIP = 500
+
+board = rrc.Board()
+board.enable_reception()
 
 def tripodCycle(hipAdjusts = [0, 0]):
     # Step 1: Lifting and moving forwards Tripod Group A 
@@ -51,6 +56,9 @@ if __name__ == '__main__':
         hipAdjusts[0] = int(hipAdjusts[0])
         hipAdjusts[1] = int(hipAdjusts[1])
         print(hipAdjusts)
-        for i in range(24):
+        for i in range(20):
+            if i % 4 == 0:
+                print(board.get_battery())
             tripodCycle(hipAdjusts)
-        break
+        time.sleep(1)
+        initialization()

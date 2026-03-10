@@ -1,6 +1,7 @@
-import numpy as np
+import math
 from collections import Counter
 # https://www.emergentmind.com/topics/gaussian-based-knn-resampling-gkr
+from data import x_data, y_data, maze_x_data, maze_y_data, out_maze_x_data, out_maze_y_data, split_data, test_data
 
 class Gaussian:
     def __init__(self, weight = 1.0):
@@ -9,14 +10,15 @@ class Gaussian:
         self.y_training_set = None
         
     def fit(self, x_train, y_train):
-        self.x_training_set = np.array(x_train)
-        self.y_training_set = np.array(y_train)
+        self.x_training_set = x_train
+        self.y_training_set = y_train
 
     def get_distance(self, x1, x2):
-        return np.sqrt(np.sum((x1 - x2) ** 2)) 
+        res = (x1 - x2) ** 2
+        return math.sqrt(res)
 
     def gaussian_weight(self, dist):
-        return np.exp(-(dist ** 2)/ (2 * self.weight ** 2))
+        return math.exp(-(dist ** 2)/ (2 * self.weight ** 2))
     
     def gaussian_decide_label(self, k_nearest_labels):
         weighted_count = {}
@@ -39,23 +41,51 @@ class Gaussian:
         
         return max_label
     
-    def test (self, test_set):
-        test_set = np.array(test_set) 
-        return [self.predict(test) for test in test_set]
-
     def predict (self, input):
         dist_labels = []
-        for x_train in self.x_training_set:
-            dist_labels.append((self.get_distance(input, x_train), i))
+        for i, x_train in enumerate(self.x_training_set):
+            dist_labels.append((self.get_distance(input, x_train[0]), i))
 
         return self.gaussian_decide_label(dist_labels)
-    
-    # def metrics (self, y_correct, y_predicted):
-    # TODO: write after knowing the data more!!!
-    #     for i in range(len(y_correct)):
-    #         y_c = y_correct[i]
-    #         y_p = y_predicted[i]
 
-    #         if y_c == y_p:
-    #             true_pos += 1
-    #         elif y_c == 
+weight = .4
+
+def run_gaussian_maze(battery_level, weight = weight):
+    gaussian = Gaussian(weight) 
+
+    gaussian.fit(maze_x_data, maze_y_data) 
+
+    return gaussian.predict(battery_level)
+
+def run_gaussian_out_maze(battery_level, weight = weight):
+    gaussian = Gaussian(weight) 
+    
+    gaussian.fit(out_maze_x_data, out_maze_y_data) 
+
+    return gaussian.predict(battery_level)
+
+def run_gaussian_all(battery_level, weight = weight):
+    gaussian = Gaussian(weight) 
+    
+    gaussian.fit(x_data, y_data) 
+
+    return gaussian.predict(battery_level)
+
+def tune_sigma():
+    # perform cross validation
+    weights = [0, 0.2, 0.4, 0.6, 0.8, 1]
+    best_weight = None
+    best_avg_err = 100 # too high of an error for anything to reach so it's safe
+    for w in weights:
+        gaussian = Gaussian(.4)
+        x_train, y_train, x_test, y_test = split_data(x_data, y_data)
+        # x_train, y_train, x_test, y_test = split_data(maze_x_data, maze_y_data)
+        gaussian.fit(x_train, y_train)
+        [accuracy, avg_error] = test_data(x_test, y_test, gaussian)
+        if avg_error < best_avg_err:
+            best_weight = weight
+    
+    print(best_weight)
+
+if __name__ == '__main__':
+    tune_sigma()
