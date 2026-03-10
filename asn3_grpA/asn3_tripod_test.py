@@ -86,10 +86,10 @@ if __name__ == '__main__':
         print(f"Starting battery level: {batteryLevel}")
         print(f"Starting hipAdjusts: {hipAdjusts}")
 
-        for i in range(20):
+        for i in range(1, 20):
             if i % 4 == 0:
-                batteryLevel = board.get_battery()
-                hipAdjusts = model.predict(batteryLevel)
+                batteryLevel = board.get_battery() / 1000
+                hipAdjusts = model.predict(batteryLevel) 
                 print(f"Battery Level: {batteryLevel}")
                 print(f"Readjusting hipAdjusts: {hipAdjusts}")
             tripodCycle(hipAdjusts)

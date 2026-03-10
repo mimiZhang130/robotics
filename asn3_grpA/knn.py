@@ -76,8 +76,8 @@ def run_knn_combo(maze, out_maze, out_maze_2, neighbors=neighbors):
 if __name__ == '__main__':
 
     knn = KNN(neighbors)
-    x_train, y_train, x_test, y_test = split_data(x_data, y_data)
-    # x_train, y_train, x_test, y_test = split_data(maze_x_data, maze_y_data)
+    # x_train, y_train, x_test, y_test = split_data(x_data, y_data)
+    x_train, y_train, x_test, y_test = split_data(maze_x_data, maze_y_data)
 
     knn.fit(x_train, y_train)
 

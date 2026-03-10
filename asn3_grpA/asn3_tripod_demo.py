@@ -64,7 +64,7 @@ if __name__ == '__main__':
         userInput3 = input("battery_level: ")
         
         model_type = userInput2.strip()
-        batteryLevel = int(userInput3.strip())
+        batteryLevel = float(userInput3.strip())
 
         if floor_type == "maze":
             if model_type == "knn":
