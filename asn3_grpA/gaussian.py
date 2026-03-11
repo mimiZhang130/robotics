@@ -73,23 +73,37 @@ def run_gaussian_combo(maze, out_maze, out_maze_2, weight = weight):
 
     return gaussian
 
-def tune_sigma():
+def tune_sigma(x_data, y_data):
     # perform cross validation
-    weights = [0, 0.2, 0.4, 0.6, 0.8, 1]
+    weights = [0.2, 0.4, 0.6, 0.8, 1]
     best_weight = None
     best_avg_err = 100 # too high of an error for anything to reach so it's safe
     for w in weights:
-        gaussian = Gaussian(.4)
+        gaussian = Gaussian(w)
         x_train, y_train, x_test, y_test = split_data(x_data, y_data)
         # x_train, y_train, x_test, y_test = split_data(maze_x_data, maze_y_data)
         gaussian.fit(x_train, y_train)
-        [accuracy, avg_error] = test_data(x_test, y_test, gaussian)
+        [accuracy, avg_error] = test_data(x_test, y_test, gaussian, False)
         if avg_error < best_avg_err:
             best_weight = weight
     
-    print(best_weight)
+    return best_weight
 
 if __name__ == '__main__':
-    # tune_sigma()
-    model = run_gaussian_out_maze()
-    print(model.predict(10.2))
+    maze = False
+    out_maze = True
+    out_maze_2 = False
+    x_data, y_data = create_data(maze, out_maze, out_maze_2)
+    best_weight = tune_sigma(x_data, y_data)
+    print(f"weight: {best_weight}")
+    gaussian = Gaussian(best_weight)
+    x_train, y_train, x_test, y_test = split_data(x_data, y_data)
+    battery_avg = 0
+    for x_t in x_test:
+        battery_avg += x_t[0]
+    battery_avg /= len(x_test)
+    print (f"battery_avg: {battery_avg}")
+
+    gaussian.fit(x_train, y_train)
+
+    test_data(x_test, y_test, gaussian)

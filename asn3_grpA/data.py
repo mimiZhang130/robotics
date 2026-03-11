@@ -194,12 +194,13 @@ def split_data (x, y, test_split = .2):
         # return all sets
         return x_train, y_train, x_test, y_test
 
-def test_data (x_test, y_test, model):
+def test_data (x_test, y_test, model, print_stuff = True):
     correct = 0
     tot_err = 0
     for test_input, actual_label in zip(x_test, y_test):
         pred = model.predict(test_input[0])
-        print(f"pred: {pred}, actual: {actual_label}")
+        if print_stuff:
+            print(f"pred: {pred}, actual: {actual_label}")
         if pred == actual_label:
             correct += 1
         hip4_err = abs(pred[0] - actual_label[0])
@@ -209,6 +210,7 @@ def test_data (x_test, y_test, model):
     
     accuracy = correct / len(x_test)
     avg_err = tot_err / (len(x_test) * 2)
-    print(f"accuracy: {accuracy}")
-    print(f"avg_err: {avg_err}")
+    if print_stuff:
+        print(f"accuracy: {accuracy}")
+        print(f"avg_err: {avg_err}")
     return [accuracy, avg_err]

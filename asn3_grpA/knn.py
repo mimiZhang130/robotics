@@ -76,9 +76,17 @@ def run_knn_combo(maze, out_maze, out_maze_2, neighbors=neighbors):
 if __name__ == '__main__':
 
     knn = KNN(neighbors)
-    # x_train, y_train, x_test, y_test = split_data(x_data, y_data)
-    x_train, y_train, x_test, y_test = split_data(maze_x_data, maze_y_data)
-
+    # x_train, y_train, x_test, y_test = split_data(maze_x_data, maze_y_data)
+    maze = True
+    out_maze = True
+    out_maze_2 = True
+    x_data, y_data = create_data(maze, out_maze, out_maze_2)
+    x_train, y_train, x_test, y_test = split_data(x_data, y_data)
+    battery_avg = 0
+    for x_t in x_test:
+        battery_avg += x_t[0]
+    battery_avg /= len(x_test)
+    print (f"battery_avg: {battery_avg}")
     knn.fit(x_train, y_train)
 
     test_data(x_test, y_test, knn)
